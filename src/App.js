@@ -6,18 +6,7 @@ import AddTodo from './AddTodo';
 
 function App() {
 
-  const [items, setItems] = useState([
-    {
-      id: "0",
-      title: "Hello World 1",
-      done: true
-    },
-    {
-      id: "1",
-      title: "Hello World 2",
-      done: true
-    },
-  ]);
+  const [items, setItems] = useState([]);
 
   const addItem = (item) => {
     item.id= "ID-" + items.length;
@@ -26,11 +15,17 @@ function App() {
     console.log("items : ", items);
   }
 
+  const deleteItem = (item) => {
+    const newItems = items.filter(e => e.id !== item.id);
+    //삭제할 아이템을 제외한 아이템을 다시 배열에 저장
+    setItems([...newItems]); //destructuring 안써도 될 듯?
+  }
+
   let todoItems = items.length > 0 && (
       <Paper style={{ margin: 16 }}>
         <List>
           {items.map((item) => 
-            <Todo item={item} key={item.id} />
+            <Todo item={item} key={item.id} deleteItem={deleteItem} />
           )}
         </List>
       </Paper>
