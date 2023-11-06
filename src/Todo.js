@@ -5,7 +5,28 @@ import { useState } from "react";
 const Todo = (props) => {
 
   const [item, setItem] = useState(props.item);
+  const [readOnly, setReadOnly] = useState(true);
+  const editItem = props.editItem;
   const deleteItem = props.deleteItem;
+
+  const checkboxEventHandler = (e) => {
+    item.done = e.target.checked;
+    editItem();
+  }
+
+  const turnOffReadOnly = () => {
+    setReadOnly(false);
+  }
+
+  const turnOnReadOnly = (e) => {
+    e.key === 'Enter' && setReadOnly(true);
+    //TODO update API 호출
+  }
+
+  const editEventHandler = (e) => {
+    item.title = e.target.value;
+    editItem();
+  }
 
   const deleteEventHandler = () => {
     deleteItem(item);
@@ -13,10 +34,13 @@ const Todo = (props) => {
 
   return (
     <ListItem>
-      <Checkbox checked={item.done}/>
+      <Checkbox checked={item.done} onChange={checkboxEventHandler} />
       <ListItemText>
         <InputBase
-          inputProps={{ "aria-label": "naked" }}
+          inputProps={{ "aria-label": "naked", readOnly: readOnly }}
+          onClick={turnOffReadOnly}
+          onKeyDown={turnOnReadOnly}
+          onChange={editEventHandler}
           type="text"
           id={item.id}
           name={item.id}
