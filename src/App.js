@@ -1,28 +1,65 @@
 import { Container, List, Paper } from '@mui/material';
 import './App.css';
 import Todo from "./Todo";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddTodo from './AddTodo';
+import axios from 'axios';
+import { API_BASE_URL } from "./api-config"
 
 function App() {
 
   const [items, setItems] = useState([]);
 
+  useEffect(() => {
+    axios.get("http://localhost:8080/todo")
+      .then((response) => {
+        setItems(response.data.data);
+      })
+      .catch((e) => {
+        console.log("http error");
+        console.log(e);
+      });
+  },[]);
+
   const addItem = (item) => {
-    item.id= "ID-" + items.length;
-    item.done = false;
-    setItems([...items, item]);
-    console.log("items : ", items);
+    // item.id= "ID-" + items.length;
+    // item.done = false;
+    // setItems([...items, item]);
+    // console.log("items : ", items);
+    axios.post(`${API_BASE_URL}/todo`, item)
+      .then((response) => {
+        setItems(response.data.data);
+      })
+      .catch((e) => {
+        console.log("http error");
+        console.log(e);
+      });
   }
 
-  const editItem = () => {
-    setItems([...items]);
+  const editItem = (item) => {
+    // setItems([...items]);
+    axios.put(`${API_BASE_URL}/todo`, item)
+      .then((response) => {
+        setItems(response.data.data);
+      })
+      .catch((e) => {
+        console.log("http error");
+        console.log(e);
+      });
   }
 
   const deleteItem = (item) => {
-    const newItems = items.filter(e => e.id !== item.id);
+    // const newItems = items.filter(e => e.id !== item.id);
     //삭제할 아이템을 제외한 아이템을 다시 배열에 저장
-    setItems([...newItems]); //destructuring 안써도 될 듯?
+    // setItems([...newItems]); //destructuring 안써도 될 듯?
+    axios.delete(`${API_BASE_URL}/todo`, {data: item})
+      .then((response) => {
+        setItems(response.data.data);
+      })
+      .catch((e) => {
+        console.log("http error");
+        console.log(e);
+      });
   }
 
   let todoItems = items.length > 0 && (
