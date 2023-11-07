@@ -11,7 +11,7 @@ const Todo = (props) => {
 
   const checkboxEventHandler = (e) => {
     item.done = e.target.checked;
-    editItem();
+    editItem(item);
   }
 
   const turnOffReadOnly = () => {
@@ -19,13 +19,17 @@ const Todo = (props) => {
   }
 
   const turnOnReadOnly = (e) => {
-    e.key === 'Enter' && setReadOnly(true);
-    //TODO update API 호출
+    // e.key === 'Enter' && setReadOnly(true);
+    if (e.key === "Enter" && readOnly === false) {
+      setReadOnly(true);
+      editItem(item);
+    }
   }
 
   const editEventHandler = (e) => {
-    item.title = e.target.value;
-    editItem();
+    // item.title = e.target.value;
+    // editItem();
+    setItem({...item, title: e.target.value});
   }
 
   const deleteEventHandler = () => {
