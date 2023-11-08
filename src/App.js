@@ -9,11 +9,13 @@ import { API_BASE_URL } from "./api-config"
 function App() {
 
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios.get(`${API_BASE_URL}/todo`, {headers: addTokenInHeaders()})
       .then((response) => {
         setItems(response.data.data);
+        setLoading(false);
       })
       .catch((e) => {
         e.response.status == 403 && (window.location.href = "/login");
@@ -107,13 +109,21 @@ function App() {
       </Paper>
     );
 
-  return (
-    <div className="App">
+  let todoListPage = (
+    <div>
       {navigationBar}
       <Container maxWidth="md">
         <AddTodo addItem={addItem} />
         <div className="TodoList">{todoItems}</div>
       </Container>
+    </div>
+  )
+
+  let loadingPage = <h1>로딩중..</h1>
+
+  return (
+    <div className="App">
+      { loading ? loadingPage : todoListPage }
     </div>
   );
 }
