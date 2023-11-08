@@ -11,11 +11,12 @@ function App() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/todo")
+    axios.get(`${API_BASE_URL}/todo`)
       .then((response) => {
         setItems(response.data.data);
       })
       .catch((e) => {
+        e.response.status == 403 && (window.location.href = "/login");
         console.log("http error");
         console.log(e);
       });
@@ -31,6 +32,7 @@ function App() {
         setItems(response.data.data);
       })
       .catch((e) => {
+        e.response.status == 403 && (window.location.href = "/login");
         console.log("http error");
         console.log(e);
       });
@@ -43,6 +45,7 @@ function App() {
         setItems(response.data.data);
       })
       .catch((e) => {
+        e.response.status == 403 && (window.location.href = "/login");
         console.log("http error");
         console.log(e);
       });
@@ -57,6 +60,7 @@ function App() {
         setItems(response.data.data);
       })
       .catch((e) => {
+        e.response.status == 403 && (window.location.href = "/login");
         console.log("http error");
         console.log(e);
       });
