@@ -1,26 +1,23 @@
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { API_BASE_URL } from "./api-config";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-const Login = () => {
+const SignUp = () => {
 
+  const signup = (userDTO) => {
+    axios.post(`${API_BASE_URL}/auth/signup`, userDTO)
+      .then((response) => {
+        window.location.href="/login";
+      })
+  }
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
     const username = data.get("username");
     const password = data.get("password");
-    siginin({ username: username, password: password });
-  }
-
-  const siginin = (userDTO) => {
-    axios.post(`${API_BASE_URL}/auth/signin`, userDTO)
-      .then((response)=>{
-        if(response.data.token) {
-          localStorage.setItem("ACCESS_TOKEN", response.data.token);
-          window.location.href="/";
-        }
-      });
+    signup({ username: username, password: password });
   }
 
   return (
@@ -29,7 +26,7 @@ const Login = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography component="h1" variant="h5">
-              로그인
+              계정 생성
             </Typography>
           </Grid>
           <Grid item xs={12}>
@@ -41,6 +38,7 @@ const Login = () => {
               label="아이디"
               name="username"
               autoComplete="username"
+              autoFocus
             />
           </Grid>
           <Grid item xs={12}>
@@ -57,18 +55,18 @@ const Login = () => {
           </Grid>
           <Grid item xs={12}>
             <Button type="submit" fullWidth variant="contained" color="primary">
-              로그인
+              계정 생성
             </Button>
           </Grid>
           <Grid item>
-            <Link to="/signup" variant="body2">
-              계정이 없습니까? 여기서 가입하세요.
+            <Link to="/login" variant="body2">
+              이미 계정이 있습니까? 로그인하세요.
             </Link>
           </Grid>
         </Grid>
       </form>
     </Container>
-  )
-}
+  );
+};
 
-export default Login;
+export default SignUp;
