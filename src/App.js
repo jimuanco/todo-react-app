@@ -11,7 +11,7 @@ function App() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/todo`)
+    axios.get(`${API_BASE_URL}/todo`, {headers: addTokenInHeaders()})
       .then((response) => {
         setItems(response.data.data);
       })
@@ -27,7 +27,7 @@ function App() {
     // item.done = false;
     // setItems([...items, item]);
     // console.log("items : ", items);
-    axios.post(`${API_BASE_URL}/todo`, item)
+    axios.post(`${API_BASE_URL}/todo`, item, {headers: addTokenInHeaders()})
       .then((response) => {
         setItems(response.data.data);
       })
@@ -40,7 +40,7 @@ function App() {
 
   const editItem = (item) => {
     // setItems([...items]);
-    axios.put(`${API_BASE_URL}/todo`, item)
+    axios.put(`${API_BASE_URL}/todo`, item, {headers: addTokenInHeaders()})
       .then((response) => {
         setItems(response.data.data);
       })
@@ -55,7 +55,7 @@ function App() {
     // const newItems = items.filter(e => e.id !== item.id);
     //삭제할 아이템을 제외한 아이템을 다시 배열에 저장
     // setItems([...newItems]); //destructuring 안써도 될 듯?
-    axios.delete(`${API_BASE_URL}/todo`, {data: item})
+    axios.delete(`${API_BASE_URL}/todo`, {data: item, headers: addTokenInHeaders()})
       .then((response) => {
         setItems(response.data.data);
       })
@@ -64,6 +64,15 @@ function App() {
         console.log("http error");
         console.log(e);
       });
+  }
+
+  const addTokenInHeaders = () => {
+    const accessToken = localStorage.getItem("ACCESS_TOKEN");
+    let headers = new Headers();
+    if (accessToken && accessToken !== null) {
+      headers = {Authorization: "Bearer " + accessToken};
+    }
+    return headers;
   }
 
   let todoItems = items.length > 0 && (

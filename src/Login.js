@@ -15,7 +15,10 @@ const Login = () => {
   const siginin = (userDTO) => {
     axios.post(`${API_BASE_URL}/auth/signin`, userDTO)
       .then((response)=>{
-        response.data.token && (window.location.href = "/");
+        if(response.data.token) {
+          localStorage.setItem("ACCESS_TOKEN", response.data.token);
+          window.location.href="/";
+        }
       });
   }
 
